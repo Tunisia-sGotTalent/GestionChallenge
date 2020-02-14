@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -98,6 +100,22 @@ public class ServiceChallenge implements IServiceChallenge<Challenge> {
             System.out.println(ex);
         }
     }
+    
+//    public ObservableList<Challenge> afficher(Challenge c) throws SQLException {
+//
+//        ObservableList<Challenge> arr = FXCollections.observableArrayList();
+//        ste = con.createStatement();
+//        ResultSet rs = ste.executeQuery("select * from challenge");
+//
+//        while (rs.next()) {
+//            arr.add(new Challenge(rs.getInt("id_challenge"), rs.getString("nom_challenge"), rs.getString("Type_challenge"), rs.getString("date_challenge"), rs.getString("image_Challenge"), rs.getString("description_challenge"), rs.getInt("nbrReact_challenge")));
+//
+//            Challenge chal = new Challenge();
+//            arr.add(chal);
+//        }
+//        return arr;
+//
+//    }
 
     @Override
     /* public void search_challenge_nom(String nom) throws SQLException {

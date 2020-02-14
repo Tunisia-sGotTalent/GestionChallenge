@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="GestionChallenge.jnlp">
+  <information>
+    <title>GestionChallenge</title>
+    <vendor>soraya</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="GestionChallenge.jar" size="11935" download="eager" />
+    <jar href="lib\jfoenix-0.0.0-SNAPSHOT-javadoc.jar" size="856778" download="eager" />
+    <jar href="lib\jfoenix-0.0.0-SNAPSHOT-retrolambda.jar" size="2699838" download="eager" />
+    <jar href="lib\jfoenix-0.0.0-SNAPSHOT-sources.jar" size="2054039" download="eager" />
+    <jar href="lib\jfoenix-0.0.0-SNAPSHOT.jar" size="2685609" download="eager" />
+    <jar href="lib\mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="GestionChallenge" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="gestionchallenge.GestionChallenge"  name="GestionChallenge" />
+  <update check="always"/>
+</jnlp>

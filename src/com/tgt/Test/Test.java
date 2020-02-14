@@ -25,7 +25,7 @@ public class Test {
        Challenge ch2=new Challenge("LOL","14/12/2020","dance","skan","blabla",3);
        
        try{
-       //Sc.ajouter_Challenge(ch1);
+       Sc.ajouter_Challenge(ch1);
        //System.out.println(Sc.delete_Challenge(10));
        
        //Sc.search_Challenge_id(1);

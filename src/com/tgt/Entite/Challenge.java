@@ -38,6 +38,18 @@ public class Challenge {
         this.nbrReact_challenge = nbrReact_challenge;
     }
 
+    public Challenge() {
+
+    }
+
+    public Challenge(String nom_challenge, String type_challenge, String date_challenge, String description_challenge) {
+        this.nom_challenge = nom_challenge;
+        this.type_challenge = type_challenge;
+        this.date_challenge = date_challenge;
+        this.description_challenge = description_challenge;
+    }
+
+   
     public int getId_challenge() {
         return id_challenge;
     }

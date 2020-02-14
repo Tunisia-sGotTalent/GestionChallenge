@@ -11,6 +11,7 @@ import java.util.List;
 /**
  *
  * @author soraya
+ * @param <C>
  */
 public interface IServiceChallenge<C> {
 
