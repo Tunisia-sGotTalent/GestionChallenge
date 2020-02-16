@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="781.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tgt.Gui.GestionChallengeFXMLController">
+    <children>
+        <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" text="Nom du challenge :" />
+      <Label layoutX="127.0" layoutY="159.0" text="Type du challenge :" />
+      <ComboBox fx:id="comboType" layoutX="252.0" layoutY="155.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="tfnom" layoutX="253.0" layoutY="116.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="127.0" layoutY="196.0" text="Date du challenge :" />
+      <DatePicker fx:id="dpDate" layoutX="252.0" layoutY="192.0" />
+      <Label layoutX="127.0" layoutY="237.0" text="Description :" />
+      <Label layoutX="126.0" layoutY="356.0" text="Image :" />
+      <TextArea fx:id="tfDescription" layoutX="253.0" layoutY="237.0" prefHeight="71.0" prefWidth="200.0" />
+      <TableView fx:id="table" layoutX="501.0" layoutY="81.0" prefHeight="247.0" prefWidth="502.0">
+        <columns>
+          <TableColumn fx:id="col_id_chal" prefWidth="76.0" text="Id Challenge" />
+          <TableColumn fx:id="col_nom_chal" prefWidth="93.0" text="Nom challenge" />
+            <TableColumn fx:id="col_type_chal" prefWidth="48.0" text="Type " />
+            <TableColumn fx:id="col_date_chal" minWidth="1.0" prefWidth="92.0" text="Date Challenge" />
+            <TableColumn fx:id="col_img_chal" prefWidth="72.0" text="image" />
+            <TableColumn fx:id="col_description_chal" prefWidth="120.0" text="description challenge" />
+        </columns>
+      </TableView>
+      <Button fx:id="buttonAdd" layoutX="194.0" layoutY="436.0" mnemonicParsing="false" onAction="#AjouterChalAction" prefHeight="25.0" prefWidth="76.0" text="Ajouter" />
+      <Button fx:id="vider" layoutX="327.0" layoutY="436.0" mnemonicParsing="false" onAction="#viderTableChal" text="Vider" />
+      <TextField fx:id="tfimage" layoutX="252.0" layoutY="352.0" />
+      <Button layoutX="668.0" layoutY="352.0" mnemonicParsing="false" onAction="#AfficherChal" text="Afficher challenges" />
+    </children>
+</AnchorPane>
