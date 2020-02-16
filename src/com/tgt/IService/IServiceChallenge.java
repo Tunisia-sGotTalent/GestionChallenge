@@ -17,14 +17,14 @@ public interface IServiceChallenge<C> {
 
     void ajouter_Challenge(C c) throws SQLException;
 
-    boolean delete_Challenge(int id) throws SQLException;
+    void delete_Challenge(int id) throws SQLException;
 
-    void search_Challenge_id(int id) throws SQLException;
+    C search_Challenge_id(int id) throws SQLException;
 
     void search_challenge_nom(String nom) throws SQLException;
 
-    void update_Challenge(C c) throws SQLException;
+    int update_Challenge(C c,int id) throws SQLException;
 
-    List<C> readAll() throws SQLException;
+    List<C> readAll(C c) throws SQLException;
 
 }

@@ -5,7 +5,6 @@
  */
 package com.tgt.Entite;
 
-import org.apache.commons.net.ntp.TimeStamp;
 
 /**
  *

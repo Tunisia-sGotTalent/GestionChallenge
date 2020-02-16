@@ -5,6 +5,7 @@
  */
 package com.tgt.Service;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.tgt.Entite.Challenge;
 import com.tgt.IService.IServiceChallenge;
 import com.tgt.Utils.Challenge_BD;
@@ -14,12 +15,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
  * @author soraya
  */
-public class ServiceChallenge implements IServiceChallenge<Challenge>{
+public class ServiceChallenge implements IServiceChallenge<Challenge> {
 
     private final Connection con;
     private Statement ste;
@@ -30,11 +33,8 @@ public class ServiceChallenge implements IServiceChallenge<Challenge>{
         con = Challenge_BD.getInstance().getConnection();
 
     }
-    
-    
-    
-    
-       @Override
+
+    @Override
     public void ajouter_Challenge(Challenge c) throws SQLException {
 
         ste = con.createStatement();
@@ -43,36 +43,38 @@ public class ServiceChallenge implements IServiceChallenge<Challenge>{
     }
 
     @Override
-    public boolean delete_Challenge(int id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void search_Challenge_id(int id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void search_challenge_nom(String nom) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update_Challenge(Challenge c) throws SQLException {
-        
-         ste = con.createStatement();
-         String requete= "UPDATE challenge SET nom_challenge=? , Type_challenge=? , date_challenge=? , image_challenge=? , descritption_challenge=? WHERE id_challenge=?";
-         ste.executeUpdate(requete);
-        
-        
-        
-         
+    public int update_Challenge(Challenge c ,int id) throws SQLException {
+
+        int st = 0;
+        try {
+            ste = con.createStatement();
+            String requete = "UPDATE challenge SET nom_challenge=? , Type_challenge=? , date_challenge=? , image_challenge=? , descritption_challenge=? WHERE id_challenge=?";
+            PreparedStatement stat;
+            stat = (PreparedStatement) con.prepareStatement(requete);
+            stat.setString(1, c.getNom_challenge());
+            stat.setString(2, c.getType_challenge());
+            stat.setString(3, c.getDate_challenge());
+            stat.setString(4, c.getDescription_challenge());
+            stat.setString(5, c.getImage_challenge());
+            stat.setInt(5, c.getId_challenge());
+
+            st = stat.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return st;
     }
 
     @Override
-    public List<Challenge> readAll() throws SQLException {
-        
-        List<Challenge> arr = new ArrayList<>();
+    public ObservableList<Challenge> readAll(Challenge c) throws SQLException {
+
+        ObservableList<Challenge> arr = FXCollections.observableArrayList();
         ste = con.createStatement();
         ResultSet rs = ste.executeQuery("select * from challenge");
         while (rs.next()) {
@@ -82,13 +84,47 @@ public class ServiceChallenge implements IServiceChallenge<Challenge>{
             String date_challenge = rs.getString(4);
             String image_challenge = rs.getString(5);
             String description_challenge = rs.getString(6);
-            
 
-            Challenge c = new Challenge(id_challenge, nom_challenge, Type_challenge, date_challenge, image_challenge, description_challenge);
+            arr.add(new Challenge(id_challenge, nom_challenge, Type_challenge, date_challenge, image_challenge, description_challenge));
             arr.add(c);
         }
         return arr;
     }
 
+    @Override
+    public void delete_Challenge(int id) throws SQLException {
+        try {
+            ste = con.createStatement();
+            String requeteDelete = " DELETE FROM `challenge` WHERE `challenge`.`id_challenge` = " + id;
+            ste.executeUpdate(requeteDelete);
+            System.out.println("Le Challenge a bien été supprimé");
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public Challenge search_Challenge_id(int id) throws SQLException {
+
+        Challenge c = new Challenge();
+        try {
+            ste = con.createStatement();
+            String requeteSearch = "SELECT * FROM challenge WHERE id_challenge = " + id;
+            rs = ste.executeQuery(requeteSearch);
+            if (rs.next()) {
+                c.setId_challenge(rs.getInt(1));
+                c.setNom_challenge(rs.getString(2));
+                c.setType_challenge(rs.getString(3));
+                c.setDate_challenge(rs.getString(4));
+                c.setImage_challenge(rs.getString(4));
+                c.setDescription_challenge(rs.getString(5));
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return c;
+    }
 
 }

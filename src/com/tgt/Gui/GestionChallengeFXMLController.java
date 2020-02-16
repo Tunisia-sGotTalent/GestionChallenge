@@ -7,6 +7,7 @@ package com.tgt.Gui;
 
 import com.tgt.Entite.Challenge;
 import com.tgt.Service.ServiceChallenge;
+import com.tgt.Utils.Challenge_BD;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,7 +26,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 
 /**
  *
@@ -49,8 +49,6 @@ public class GestionChallengeFXMLController implements Initializable {
 
     private ObservableList<String> list = FXCollections.observableArrayList("Chant", "Dance", "théatre", "Peinture");
     @FXML
-    private Button vider;
-    @FXML
     private TextField tfimage;
     @FXML
     private TableView<Challenge> table;
@@ -66,9 +64,11 @@ public class GestionChallengeFXMLController implements Initializable {
     @FXML
     private TableColumn<Challenge, String> col_img_chal;
 
-    public ObservableList<Challenge> data = FXCollections.observableArrayList();
+    public ObservableList<Challenge> arr = FXCollections.observableArrayList();
     @FXML
     private TableColumn<Challenge, String> col_description_chal;
+    @FXML
+    private TextField tfsearch;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -103,11 +103,6 @@ public class GestionChallengeFXMLController implements Initializable {
 
     }
 
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
-
     @FXML
     private void viderTableChal(ActionEvent event) {
 
@@ -120,13 +115,41 @@ public class GestionChallengeFXMLController implements Initializable {
 
     @FXML
     private void AfficherChal(ActionEvent event) {
+        Challenge c = new Challenge();
+        col_id_chal.setCellValueFactory(new PropertyValueFactory<>("id_challenge"));
+        col_nom_chal.setCellValueFactory(new PropertyValueFactory<>("nom_challenge"));
+        col_type_chal.setCellValueFactory(new PropertyValueFactory<>("Type_challenge"));
+        col_date_chal.setCellValueFactory(new PropertyValueFactory<>("date_challenge"));
+        col_img_chal.setCellValueFactory(new PropertyValueFactory<>("image_challenge"));
+        col_description_chal.setCellValueFactory(new PropertyValueFactory<>("description_challenge"));
 
-        ServiceChallenge sc = new ServiceChallenge();
         try {
-            sc.readAll();
+            ServiceChallenge sc = new ServiceChallenge();
+            arr = sc.readAll(c);
         } catch (SQLException e) {
             System.out.println(e);
         }
+
+        table.setItems((ObservableList<Challenge>) arr);
+
+    }
+
+    @FXML
+    private void chercherChal(ActionEvent event) {
+
+        String Chalid = tfsearch.getText();
+        int id = Integer.parseInt(Chalid);
+
+//        tfnom.setText(c.getNom_challenge());
+//        dpDate.setText(c.getDate_challenge());
+//        comboType.setText(c.getType_challenge());
+    }
+
+    @FXML
+    private void ModifierChal(ActionEvent event) {
+
+        Challenge c = new Challenge();
+        ServiceChallenge sc = new ServiceChallenge();
 
         col_id_chal.setCellValueFactory(new PropertyValueFactory<>("id_challenge"));
         col_nom_chal.setCellValueFactory(new PropertyValueFactory<>("nom_challenge"));
@@ -135,20 +158,57 @@ public class GestionChallengeFXMLController implements Initializable {
         col_img_chal.setCellValueFactory(new PropertyValueFactory<>("image_challenge"));
         col_description_chal.setCellValueFactory(new PropertyValueFactory<>("description_challenge"));
 
-        table.setItems(data);
+        try {
 
-    }
+            arr = sc.readAll(c);
+            table.setItems((ObservableList<Challenge>) arr);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
 
-    @FXML
-    private void ModifierChal(ActionEvent event) {
+        c.setNom_challenge(tfnom.getText());
+        c.setDate_challenge(dpDate.getEditor().getText());
+        c.setType_challenge(comboType.getValue());
+        c.setImage_challenge(tfimage.getText());
+        c.setDescription_challenge(tfDescription.getText());
+        c.setId_challenge(Integer.parseInt(tfsearch.getText()));
+
+        try {
+//         
+            sc.update_Challenge(c, Integer.parseInt(tfsearch.getText()));
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
     }
 
     @FXML
     private void supprimerChal(ActionEvent event) {
-    }
 
-    @FXML
-    private void chercherChal(ActionEvent event) {
+        Challenge c = new Challenge();
+        ServiceChallenge sc = new ServiceChallenge();
+        col_id_chal.setCellValueFactory(new PropertyValueFactory<>("id_challenge"));
+        col_nom_chal.setCellValueFactory(new PropertyValueFactory<>("nom_challenge"));
+        col_type_chal.setCellValueFactory(new PropertyValueFactory<>("Type_challenge"));
+        col_date_chal.setCellValueFactory(new PropertyValueFactory<>("date_challenge"));
+        col_img_chal.setCellValueFactory(new PropertyValueFactory<>("image_challenge"));
+        col_description_chal.setCellValueFactory(new PropertyValueFactory<>("description_challenge"));
+
+        try {
+            arr = sc.readAll(c);
+            table.setItems((ObservableList<Challenge>) arr);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
+        c.setId_challenge(Integer.parseInt(tfsearch.getText()));
+
+        try {
+            sc.delete_Challenge(Integer.parseInt(tfsearch.getText()));
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
     }
 
 }
