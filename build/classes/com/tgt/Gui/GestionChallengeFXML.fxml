@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 
 <AnchorPane id="AnchorPane" prefHeight="955.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tgt.Gui.GestionChallengeFXMLController">
     <children>
@@ -21,7 +22,7 @@
       <Label layoutX="127.0" layoutY="237.0" text="Description :" />
       <Label layoutX="126.0" layoutY="356.0" text="Image :" />
       <TextArea fx:id="tfDescription" layoutX="253.0" layoutY="237.0" prefHeight="71.0" prefWidth="200.0" />
-      <TableView fx:id="table" layoutX="572.0" layoutY="131.0" prefHeight="247.0" prefWidth="502.0">
+      <TableView fx:id="table" layoutX="572.0" layoutY="131.0" onMouseClicked="#Selectitemes" prefHeight="247.0" prefWidth="502.0">
         <columns>
           <TableColumn fx:id="col_id_chal" prefWidth="76.0" text="Id Challenge" />
           <TableColumn fx:id="col_nom_chal" prefWidth="93.0" text="Nom challenge" />
@@ -33,7 +34,7 @@
       </TableView>
       <Button fx:id="buttonAdd" layoutX="145.0" layoutY="449.0" mnemonicParsing="false" onAction="#AjouterChalAction" prefHeight="25.0" prefWidth="76.0" text="Ajouter" />
       
-      <TextField fx:id="tfimage" layoutX="252.0" layoutY="352.0" />
+      <TextField fx:id="tfimage" editable="false" layoutX="252.0" layoutY="352.0" />
       
      
       <Label layoutX="282.0" layoutY="64.0" text="Chercher challenge :" />
@@ -41,8 +42,9 @@
       <Button layoutX="415.0" layoutY="450.0" mnemonicParsing="false" onAction="#supprimerChal" prefHeight="28.0" prefWidth="76.0" text="Supprimer" />
       <Button layoutX="704.0" layoutY="60.0" mnemonicParsing="false" onAction="#chercherChal" prefHeight="25.0" prefWidth="67.0" text="Chercher" />
       <Button layoutX="252.0" layoutY="449.0" mnemonicParsing="false" onAction="#viderTableChal" prefHeight="26.0" prefWidth="54.0" text="Vider" />
-      <Button layoutX="804.0" layoutY="449.0" mnemonicParsing="false" onAction="#AfficherChal" text="Afficher Challenges" />
-      <TextField fx:id="tfsearch" layoutX="427.0" layoutY="52.0" prefHeight="26.0" prefWidth="234.0" />
+      <TextField fx:id="tfsearch" layoutX="453.0" layoutY="60.0" prefHeight="26.0" prefWidth="234.0" />
+      <Button layoutX="439.0" layoutY="353.0" minWidth="25.0" mnemonicParsing="false" onMouseClicked="#browse" prefHeight="32.0" prefWidth="25.0" text="Button" />
+      <Pane prefHeight="628.0" prefWidth="113.0" style="-fx-background-color: a22235;" />
       
     </children>
 </AnchorPane>

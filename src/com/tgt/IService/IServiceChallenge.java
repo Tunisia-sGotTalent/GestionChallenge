@@ -23,7 +23,10 @@ public interface IServiceChallenge<C> {
 
     void search_challenge_nom(String nom) throws SQLException;
 
-    int update_Challenge(C c,int id) throws SQLException;
+
+    void update_Challenge(C c,int id) throws SQLException;
+    
+  //  List<C> readAll() throws SQLException;
 
     List<C> readAll(C c) throws SQLException;
 

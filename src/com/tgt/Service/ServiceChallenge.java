@@ -48,30 +48,26 @@ public class ServiceChallenge implements IServiceChallenge<Challenge> {
     }
 
     @Override
-    public int update_Challenge(Challenge c ,int id) throws SQLException {
+    public void update_Challenge(Challenge c, int id) throws SQLException {
 
-        int st = 0;
         try {
-            ste = con.createStatement();
-            String requete = "UPDATE challenge SET nom_challenge=? , Type_challenge=? , date_challenge=? , image_challenge=? , descritption_challenge=? WHERE id_challenge=?";
-            PreparedStatement stat;
-            stat = (PreparedStatement) con.prepareStatement(requete);
-            stat.setString(1, c.getNom_challenge());
-            stat.setString(2, c.getType_challenge());
-            stat.setString(3, c.getDate_challenge());
-            stat.setString(4, c.getDescription_challenge());
-            stat.setString(5, c.getImage_challenge());
-            stat.setInt(5, c.getId_challenge());
+            if ((c.getNom_challenge() != "") && (c.getType_challenge() != "") && (c.getDate_challenge() != "") && (c.getImage_challenge() != "") && (c.getDescription_challenge() != "")) {
+                String query = "update challenge set nom_challenge='" + c.getNom_challenge() + "',Type_challenge='" +c.getType_challenge()+ "',date_challenge='" + c.getDate_challenge() + "',image_challenge='" + c.getImage_challenge() + "',description_Challenge='" + c.getDescription_challenge() + "' where challenge.id_challenge=" + c.getId_challenge();
 
-            st = stat.executeUpdate();
+                ste = con.createStatement();
+                ste.executeUpdate(query);
 
+                System.out.println("bien modifiée");
+
+            } else {
+                System.out.println("tu dois inserer tous les elements");
+            }
         } catch (SQLException ex) {
-            System.out.println(ex);
+
         }
-        return st;
     }
 
-    @Override
+
     public ObservableList<Challenge> readAll(Challenge c) throws SQLException {
 
         ObservableList<Challenge> arr = FXCollections.observableArrayList();
@@ -86,10 +82,14 @@ public class ServiceChallenge implements IServiceChallenge<Challenge> {
             String description_challenge = rs.getString(6);
 
             arr.add(new Challenge(id_challenge, nom_challenge, Type_challenge, date_challenge, image_challenge, description_challenge));
-            arr.add(c);
+            
         }
         return arr;
     }
+    
+ 
+
+   
 
     @Override
     public void delete_Challenge(int id) throws SQLException {
@@ -126,5 +126,8 @@ public class ServiceChallenge implements IServiceChallenge<Challenge> {
         }
         return c;
     }
+
+
+
 
 }
