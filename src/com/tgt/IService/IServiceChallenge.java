@@ -19,15 +19,11 @@ public interface IServiceChallenge<C> {
 
     void delete_Challenge(int id) throws SQLException;
 
-    C search_Challenge_id(int id) throws SQLException;
-
-    void search_challenge_nom(String nom) throws SQLException;
-
+    List<C> search_challenge_nom(String nom) throws SQLException;
 
     void update_Challenge(C c,int id) throws SQLException;
-    
-  //  List<C> readAll() throws SQLException;
 
     List<C> readAll(C c) throws SQLException;
+    List<C> trier_Challenge_SelonType() throws SQLException;
 
 }

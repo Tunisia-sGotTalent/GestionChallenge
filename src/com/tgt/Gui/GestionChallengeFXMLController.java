@@ -12,15 +12,21 @@ import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.print.PrinterJob;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -31,6 +37,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -80,6 +89,8 @@ public class GestionChallengeFXMLController implements Initializable {
 
     ServiceChallenge sc = new ServiceChallenge();
     String path;
+    @FXML
+    private Button supprimeboutton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -102,6 +113,26 @@ public class GestionChallengeFXMLController implements Initializable {
 
         table.setItems((ObservableList<Challenge>) arr);
 
+        //CODE POUR RECHERCHE
+        FilteredList<Challenge> filteredData = new FilteredList<>(arr, b -> true);
+        tfsearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(ch -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (ch.getNom_challenge().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                }// Filter matches first name.
+
+                return false;
+            });
+        });
+        SortedList<Challenge> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
+
     }
 
     @FXML
@@ -110,7 +141,6 @@ public class GestionChallengeFXMLController implements Initializable {
         String nomChal = tfnom.getText();
         String descriptionChal = tfDescription.getText();
         String value = dpDate.getValue().toString();
-
         String imgC = tfimage.getText();
 
         Challenge c = new Challenge();
@@ -162,52 +192,13 @@ public class GestionChallengeFXMLController implements Initializable {
     }
 
     @FXML
-    private void chercherChal(ActionEvent event) {
-
-//        tfnom.setText(c.getNom_challenge());
-//        dpDate.setText(c.getDate_challenge());
-//        comboType.setText(c.getType_challenge());
-    }
-
-    @FXML
-    private void ModifierChal(ActionEvent event) {
-
-        Challenge c = new Challenge();
-        ServiceChallenge sc = new ServiceChallenge();
-
-   
-        ObservableList<Challenge> oblist;
-        oblist =table.getSelectionModel().getSelectedItems();
-        
-        
- int max = Integer.parseInt(tfsearch.getText());
-        c.setNom_challenge(tfnom.getText());
-        c.setDate_challenge(dpDate.getEditor().getText());
-        c.setType_challenge(comboType.getValue());
-        c.setImage_challenge(tfimage.getText());
-        c.setDescription_challenge(tfDescription.getText());
-        c.setId_challenge(Integer.parseInt(tfsearch.getText()));
-        
-
-        try {
-         
-            sc.update_Challenge(c,max);
-            refresh();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        
-
-    }
-
-    @FXML
-    private void supprimerChal(ActionEvent event) {
+    private void supprimerChal(ActionEvent event) throws SQLException {
 
         Challenge c = new Challenge();
         int max = Integer.parseInt(tfsearch.getText());
         ServiceChallenge sc = new ServiceChallenge();
 
-        //c.setId_challenge(Integer.parseInt(tfsearch.getText()));
+        c.setId_challenge(Integer.parseInt(tfsearch.getText()));
         try {
 
             sc.delete_Challenge(max);
@@ -219,46 +210,86 @@ public class GestionChallengeFXMLController implements Initializable {
     }
 
     @FXML
-    private void Selectitemes(MouseEvent event) {
+    private void modifierChal(ActionEvent event) {
         
+        
+        Challenge c = new Challenge();
+        ServiceChallenge sc=new ServiceChallenge();
         ObservableList<Challenge> oblist;
-        oblist =table.getSelectionModel().getSelectedItems();
+        oblist = table.getSelectionModel().getSelectedItems();
         
-        if(oblist!=null)
-        {
-            tfnom.setText(oblist.get(0).getNom_challenge());
-           // comboType.setText(oblist.get(0).getNom_challenge());
-           tfDescription.setText(oblist.get(0).getDescription_challenge());
-           tfimage.setText(oblist.get(0).getImage_challenge());
-           dpDate.getEditor().setText(oblist.get(0).getImage_challenge());
-           
+        int max=Integer.parseInt(tfsearch.getText());
+        c.setNom_challenge(tfnom.getText());
+        c.setDate_challenge(dpDate.getEditor().getText());
+        c.setType_challenge(comboType.getValue());
+        c.setImage_challenge(tfimage.getText());
+        c.setDescription_challenge(tfDescription.getText());
+        //c.setId_challenge(Integer.parseInt(tfsearch.getText()));
+
+        try {
+
+            sc.update_Challenge(c, max);
+            
+        } catch (SQLException ex) {
+            System.out.println(ex);
         }
     }
-    private String filen(){
-        
-        
+
+    @FXML
+    private void Selectitemes(MouseEvent event) {
+
+        ObservableList<Challenge> oblist;
+        oblist = table.getSelectionModel().getSelectedItems();
+
+        if (oblist != null) {
+            tfnom.setText(oblist.get(0).getNom_challenge());
+            // comboType.setText(oblist.get(0).getNom_challenge());
+            tfDescription.setText(oblist.get(0).getDescription_challenge());
+            tfimage.setText(oblist.get(0).getImage_challenge());
+            dpDate.getEditor().setText(oblist.get(0).getImage_challenge());
+
+        }
+    }
+
+    private String filen() {
+
         try {
-            JFileChooser chooser=new JFileChooser();
+            JFileChooser chooser = new JFileChooser();
             chooser.showOpenDialog(null);
-            File f=chooser.getSelectedFile();
-            String filename=null;
-            filename= f.getAbsolutePath();
-            path=filename;
+            File f = chooser.getSelectedFile();
+            String filename = null;
+            filename = f.getAbsolutePath();
+            path = filename;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Veuillez mettre une image");
+            JOptionPane.showMessageDialog(null, "Veuillez mettre une image");
         }
         return path;
     }
 
     @FXML
     private void browse(MouseEvent event) {
-       String path1 =filen();
-       if(path1 == null){
-       
-       } else {
-       tfimage.setText(path1);}
-           
+        String path1 = filen();
+        if (path1 == null) {
+
+        } else {
+            tfimage.setText(path1);
+        }
+
     }
-    
+
+    @FXML
+    private void imprimer(MouseEvent event) {
+
+        System.out.println(" can I print?");
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+        if (printerJob.printPage(table)) {
+            printerJob.endJob();
+            System.out.println("printed");
+        }
+    }
+
+    @FXML
+    private void rechercherChal(ActionEvent event) {
+    }
 
 }
